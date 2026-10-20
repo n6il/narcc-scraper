@@ -130,6 +130,8 @@ for d in data:
 		tidx=0
 	nidx=0
 	print('narcc', len(narcc))
+
+	label=True
 	while tidx<len(table) and nidx<len(narcc):
 		#print('tidx: ',tidx, 'nidx', nidx, 'table: ', len(table), 'bank', d['bank'])
 		l = table[tidx]
@@ -156,7 +158,10 @@ for d in data:
 		shift = '+' if f2>frequency else '-'
 		shiftf = "%0.3fMHz" % round(abs(f2 - frequency), 3)
 		skip = ''
-		name = "%-15s" % (call+" "+sponsor) if call != sponsor else call
+		if label:
+			name = '*' + d['band'] + " " + d['zone'].replace('%20', ' ')[:15]
+		else:
+			name = "%-15s" % (call+" "+sponsor[:15]) if call != sponsor else call
 		num = l[-1]
 
 		row = (
@@ -180,7 +185,10 @@ for d in data:
 		print(row)
 		table[tidx] = row
 		tidx += 1
-		nidx+=1
+		if label:
+			label = False
+		else:
+			nidx+=1
 		if nidx==len(narcc):
 			break
 
